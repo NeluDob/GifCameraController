@@ -1,13 +1,13 @@
 source 'https://github.com/CocoaPods/Specs.git'
 use_frameworks!
 
-target 'GifCameraController_Example', :exclusive => true do
+target 'GifCameraController_Example' do
   pod 'GifCameraController', :path => '../'
 end
 
-target 'GifCameraController_Tests', :exclusive => true do
+target 'GifCameraController_Tests' do
   pod 'GifCameraController', :path => '../'
 
-  pod 'Quick', '~> 0.8'
-  pod 'Nimble', '~> 3.0'
+  pod 'Quick'
+  pod 'Nimble'
 end
