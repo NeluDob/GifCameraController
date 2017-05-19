@@ -8,6 +8,4 @@ end
 target 'GifCameraController_Tests' do
   pod 'GifCameraController', :path => '../'
 
-  pod 'Quick'
-  pod 'Nimble'
 end

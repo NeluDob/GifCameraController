@@ -13,13 +13,15 @@ import GLKit
 import AVFoundation
 
 protocol PreviewTarget {
-    func setImage(_ image: CIImage)
+    func setImage(image: CIImage)
 }
 
-open class GifCameraPreviewView: GLKView, PreviewTarget {
+public class GifCameraPreviewView: GLKView, PreviewTarget {
     
     var coreImageContext: CIContext!
     var drawableBounds: CGRect!
+    static public var currentFilter: CIFilter!
+    
     
     override public init(frame: CGRect) {
         super.init(frame: frame, context: GifContextManager.sharedInstance.eaglContext)
@@ -39,10 +41,34 @@ open class GifCameraPreviewView: GLKView, PreviewTarget {
         super.init(coder: aDecoder)
     }
     
-    func setImage(_ sourceImage: CIImage) {
+    func setImage(image: CIImage) {
         self.bindDrawable()
-        self.coreImageContext.draw(sourceImage, in: self.drawableBounds, from: sourceImage.extent)
-        self.display()
+        
+        if let filter = GifCameraPreviewView.currentFilter {
+
+            if GifCameraController.currentDevicePosition == .front {
+                self.coreImageContext.draw(image, in: self.drawableBounds, from: image.extent)
+                
+                self.display()
+            } else {
+            
+            filter.setValue(image, forKey: kCIInputImageKey)
+            
+            if let output = filter.outputImage {
+                if let cgimg = self.coreImageContext.createCGImage(output, from: output.extent) {
+                    self.coreImageContext.draw(CIImage(cgImage: cgimg), in: self.drawableBounds, from: image.extent)
+                    
+                    self.display()
+                }
+            }
+            
+            }
+        } else {
+            self.coreImageContext.draw(image, in: self.drawableBounds, from: image.extent)
+
+            self.display()
+        }
+        
     }
 }
 

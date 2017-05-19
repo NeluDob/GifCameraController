@@ -55,7 +55,7 @@ class ViewController: UIViewController {
                 self.gifCamera.framesPerSecond = 16
                 setupPreviewView()
                 setupRecordButton()
-                self.gifCamera.setPreviewView(self.previewView)
+                self.gifCamera.setPreviewView(view: self.previewView)
                 self.gifCamera.toggleCamera()
             }
         }
@@ -81,7 +81,7 @@ extension ViewController: GifCameraControllerDelegate {
     //  Flash the screen when a new frame is taken
     //
     //
-    func cameraController(_ cameraController: GifCameraController, didAppendFrameNumber index: Int) {
+    func cameraController(cameraController: GifCameraController, didAppendFrameNumber index: Int) {
         
         print(index, Date().timeIntervalSince1970)
         
@@ -101,7 +101,7 @@ extension ViewController: GifCameraControllerDelegate {
     //  Open gif in new view
     //
     //
-    func cameraController(_ cameraController: GifCameraController, didFinishRecordingWithFrames frames: [CGImage], withTotalDuration duration: Double) {
+    func cameraController(cameraController: GifCameraController, didFinishRecordingWithFrames frames: [CGImage], withTotalDuration duration: Double) {
         let previewVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "previewVC") as! PreviewViewController
         previewVC.bitmaps = frames
         previewVC.duration = duration
