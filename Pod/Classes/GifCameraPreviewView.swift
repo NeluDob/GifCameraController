@@ -45,27 +45,30 @@ public class GifCameraPreviewView: GLKView, PreviewTarget {
         self.bindDrawable()
         
         if let filter = GifCameraPreviewView.currentFilter {
-
+            
             if GifCameraController.currentDevicePosition == .front {
-                self.coreImageContext.draw(image, in: self.drawableBounds, from: image.extent)
+                filter.setValue(image, forKey: kCIInputImageKey)
+                if let outputImage = filter.outputImage{
+                    self.coreImageContext.draw(outputImage, in: self.drawableBounds, from: image.extent)
+                }
                 
                 self.display()
             } else {
-            
-            filter.setValue(image, forKey: kCIInputImageKey)
-            
-            if let output = filter.outputImage {
-                if let cgimg = self.coreImageContext.createCGImage(output, from: output.extent) {
-                    self.coreImageContext.draw(CIImage(cgImage: cgimg), in: self.drawableBounds, from: image.extent)
-                    
-                    self.display()
+                
+                filter.setValue(image, forKey: kCIInputImageKey)
+                
+                if let output = filter.outputImage {
+                    if let cgimg = self.coreImageContext.createCGImage(output, from: output.extent) {
+                        self.coreImageContext.draw(CIImage(cgImage: cgimg), in: self.drawableBounds, from: image.extent)
+                        
+                        self.display()
+                    }
                 }
-            }
-            
+                
             }
         } else {
             self.coreImageContext.draw(image, in: self.drawableBounds, from: image.extent)
-
+            
             self.display()
         }
         
